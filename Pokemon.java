@@ -3,6 +3,7 @@ public class Pokemon {
     protected boolean fainted;
     private int MAX_POINTS = 600;
     
+    //private EffectManager effects = new EffectManager();
 
     
     //basic stats
@@ -23,7 +24,10 @@ public class Pokemon {
         "Heal", "Fortify", "Sharpen", "Focus", "Turntables",
         "Switch", "Resist", "Coin Flip", "Death Ray", "Body Slam",
         "Leech", "Intimidate", "Tickle", "Self Destruct", "Adrenaline Rush",
-        "Chip", "Rush"
+        "Chip", "Rush", "Venomous Bite", "Venomous Splash", "Necromancy", "Withering Touch",
+        "Bless", "Blessed Blade", "Stretch", "Lightning Flash", "Quick Attack", "Dream",
+        "Living Wall", "Delayed Kick", "Delayed Blast", "Thunder Cross Split Attack", "Charge Up",
+        "Faulty Code", "Hack",
     };
 
     //basic constructor
@@ -102,7 +106,19 @@ public class Pokemon {
     public void setMove(String move, int index){}
 
 
+    public void mPrint(){
+        System.out.println("Name: " + name);
+        System.out.println("Health: " + Math.round(((double)health/(double)maxHealth*100.0)) + "%");
+        System.out.println("");
+    }
 
+    public void movePrint(){
+        System.out.println("Move 0: " + getMove(0));
+        System.out.println("Move 1: " + getMove(1));
+        System.out.println("Move 2: " + getMove(2));
+        System.out.println("Move 3: " + getMove(3));
+        System.out.println("");
+    }
 
 
 
@@ -125,21 +141,7 @@ public class Pokemon {
         System.out.println("Health: " + Math.round(((double)health/(double)maxHealth*100.0)) + "%");
         System.out.println("");
     }
-    
-    public void mPrint(){
-        System.out.println("Name: " + name);
-        System.out.println("Health: " + Math.round(((double)health/(double)maxHealth*100.0)) + "%");
-        System.out.println("");
-    }
 
-    public void movePrint(){
-        System.out.println("Move 0: " + getMove(0));
-        System.out.println("Move 1: " + getMove(1));
-        System.out.println("Move 2: " + getMove(2));
-        System.out.println("Move 3: " + getMove(3));
-        System.out.println("");
-    }
-    
     //return random number
     private final int roll(int sides){
         return (int) (Math.random() * sides);
@@ -155,6 +157,7 @@ public class Pokemon {
                 }
             }
             if (!found){
+                System.out.println("Illegal moves found!");
                 return false;
             }
         }
@@ -165,6 +168,7 @@ public class Pokemon {
         if ((number >= 50) && (number <= 200)){
             return true;
         }
+        System.out.println("Stat out of bounds!");
         return false;
     }
 
@@ -173,13 +177,11 @@ public class Pokemon {
         int pointSum = (
             target.getMaxHealthM() + target.getSpeedM() + target.getAttackM() +
             target.getSpecialAttackM() + target.getDefenseM() + target.getSpecialDefenseM()
-            
         );
 
         int givenPointSum = (
             target.getMaxHealth() + target.getSpeed() + target.getAttack() +
             target.getSpecialAttack() + target.getDefense() + target.getSpecialDefense()
-            
         );
 
         if (pointSum != givenPointSum){
@@ -284,7 +286,16 @@ public class Pokemon {
                 && Pokemon.validateStats(target, maxPoints) 
                 && Pokemon.validateSetters(target)
             )){
-                    return false;
+                if (!Pokemon.validateStats(target, maxPoints)){
+                    System.out.println("Error found within stats");
+                    System.out.println("There are many possible issues, please check:");
+                    System.out.println("Getters (are they all there? do the work correctly?)");
+                    System.out.println("Stat total (Is it within match bounds?)");
+                }
+                if (!Pokemon.validateSetters(target)){
+                    System.out.println("Error found with setters.");
+                }
+                return false;
             }
         }
         return true;
